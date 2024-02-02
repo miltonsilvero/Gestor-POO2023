@@ -1,9 +1,9 @@
-#ifndef FILTROS_H
-#define FILTROS_H
+#ifndef M_FILTROS_H
+#define M_FILTROS_H
 #include "wxfb_project.h"
 #include "m_Window.h"
 
-class Filtros : public MyFrame3 {
+class m_Filtros : public Filtros {
 	
 private:
 	std::string fechaInicio;
@@ -16,15 +16,15 @@ protected:
 	void ClickGuardar( wxCommandEvent& event )  override;
 	
 public:
-	Filtros(wxWindow *parent=NULL);
+	m_Filtros(wxWindow *parent=NULL);
 	
 	void SetWindow(m_Window *mainWindow);
-	
 	std::string VerFechaInicio();
 	std::string VerFechaFin();
 	std::string VerAsunto();
 	std::string VerTipo();
-	~Filtros();
+	
+	~m_Filtros();
 };
 
 #endif

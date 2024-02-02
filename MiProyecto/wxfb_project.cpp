@@ -287,7 +287,7 @@ Home::~Home()
 
 }
 
-MyFrame3::MyFrame3( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+Filtros::Filtros( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
@@ -394,12 +394,12 @@ MyFrame3::MyFrame3( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_guardarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame3::ClickGuardar ), NULL, this );
+	m_guardarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickGuardar ), NULL, this );
 }
 
-MyFrame3::~MyFrame3()
+Filtros::~Filtros()
 {
 	// Disconnect Events
-	m_guardarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame3::ClickGuardar ), NULL, this );
+	m_guardarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickGuardar ), NULL, this );
 
 }

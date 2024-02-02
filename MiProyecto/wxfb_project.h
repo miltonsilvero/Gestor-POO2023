@@ -100,9 +100,9 @@ class Home : public wxFrame
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class MyFrame3
+/// Class Filtros
 ///////////////////////////////////////////////////////////////////////////////
-class MyFrame3 : public wxFrame
+class Filtros : public wxFrame
 {
 	private:
 
@@ -124,9 +124,9 @@ class MyFrame3 : public wxFrame
 
 	public:
 
-		MyFrame3( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 350,250 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		Filtros( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 350,250 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
-		~MyFrame3();
+		~Filtros();
 
 };
 

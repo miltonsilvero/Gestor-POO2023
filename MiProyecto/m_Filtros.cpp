@@ -1,11 +1,10 @@
-#include "Filtros.h"
-#include "m_Window.h"
+#include "m_Filtros.h"
 
-Filtros::Filtros(wxWindow *parent) : MyFrame3(parent) {
+m_Filtros::m_Filtros(wxWindow *parent) : Filtros(parent) {
 	
 }
 
-void Filtros::ClickGuardar( wxCommandEvent& event )  {
+void m_Filtros::ClickGuardar( wxCommandEvent& event )  {
 	fechaInicio = m_finicioLabel->GetValue();
 	fechaFin = m_ffinalLabel->GetValue();
 	asunto = m_asuntoLabel2->GetValue();
@@ -18,22 +17,24 @@ void Filtros::ClickGuardar( wxCommandEvent& event )  {
 	}
 }
 
-std::string Filtros::VerFechaInicio(){
+std::string m_Filtros::VerFechaInicio(){
 	return fechaInicio;
 }
-std::string Filtros::VerFechaFin(){
+std::string m_Filtros::VerFechaFin(){
 	return fechaFin;
 }
-std::string Filtros::VerAsunto(){
+std::string m_Filtros::VerAsunto(){
 	return asunto;
 }
-std::string Filtros::VerTipo(){
+std::string m_Filtros::VerTipo(){
 	return tipo;
 }
-Filtros::~Filtros() {
+
+void m_Filtros::SetWindow(m_Window *mainWindow){
+	_mainWindow = mainWindow;
+}
+
+m_Filtros::~m_Filtros() {
 	
 }
 
-void Filtros::SetWindow(m_Window *mainWindow){
-	_mainWindow = mainWindow;
-}

@@ -192,7 +192,7 @@ void m_Window::GetName(std::string userName){
 void m_Window::ClickFiltrar( wxCommandEvent& event )  {
 	if(_userName != "admin"){
 		if (!m_filtros) {
-			m_filtros = new Filtros(this);
+			m_filtros = new m_Filtros(this);
 			m_filtros->SetWindow(this);
 		}
 		m_filtros->Show();

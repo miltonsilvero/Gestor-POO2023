@@ -3,14 +3,14 @@
 #include "wxfb_project.h"
 #include "Grid.h"
 #include "Admin.h"
-#include "Filtros.h"
+#include "m_Filtros.h"
 
 class m_Window : public Window {
 	
 private:
 	Admin aux;
 	Grid *m_grid;
-	Filtros *m_filtros;
+	m_Filtros *m_filtros;
 	std::string _userName;
 protected:
 	void ClickFiltrar( wxCommandEvent& event )  override;
