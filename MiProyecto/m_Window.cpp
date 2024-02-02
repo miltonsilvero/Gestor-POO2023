@@ -136,7 +136,7 @@ void m_Window::Refresh(){
 	}
 	
 	if (m_grid->EsAdmin(_username)) {
-		auto totales = m_grid->ObtenerTotales();
+		auto totales = m_grid->TotalesGlobales();
 		int newRow = m_Historial->AppendRows();
 		m_Historial->SetCellValue(newRow, 0, "Totales:");
 		m_Historial->SetCellValue(newRow, 1, wxString::Format("%d", std::get<0>(totales)));
