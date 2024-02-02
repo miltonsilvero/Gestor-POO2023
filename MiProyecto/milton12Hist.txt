@@ -1,0 +1,7 @@
+HISTORIAL DE GASTOS
+20241131  Ingreso  Regalo  100000
+20240202  Ingreso  Sueldo  2000
+20240202  Ingreso  Sueldo  2000
+20240202  Ingreso  Sueldo  2000
+20240202  Ingreso  Sueldo  2000
+20241131  ------  BALANCE:   108000

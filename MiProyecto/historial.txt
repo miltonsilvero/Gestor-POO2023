@@ -1,0 +1,5 @@
+HISTORIAL DE GASTOS
+20230120  Ingreso  mes  3000
+20230120  Egreso  mes  3000
+20230120  Egreso  mes  3000
+20230120  ------  BALANCE:   -3000
