@@ -28,9 +28,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class Window
+/// Class Gestor
 ///////////////////////////////////////////////////////////////////////////////
-class Window : public wxFrame
+class Gestor : public wxFrame
 {
 	private:
 
@@ -64,9 +64,9 @@ class Window : public wxFrame
 
 	public:
 
-		Window( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("REGISTRO DE GASTOS"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,400 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		Gestor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("REGISTRO DE GASTOS"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,400 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
-		~Window();
+		~Gestor();
 
 };
 

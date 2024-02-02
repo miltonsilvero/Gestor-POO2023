@@ -1,7 +1,11 @@
-#ifndef ADMIN_H
-#define ADMIN_H
+#ifndef ORDEN_H
+#define ORDEN_H
 #include <vector>
 #include <string>
+
+/***
+Clase dedicada a almacenar los datos de cada orden ejecutada de compra y venta.
+***/
 
 struct compras{
 	long fecha;
@@ -10,14 +14,14 @@ struct compras{
 	long monto;
 };
 
-class Admin {
+class Orden {
 private:
 	long fecha;
 	std::string tipo;
 	std::string asunto;
 	long monto;
 public:
-	Admin(long fecha=0,std::string tipo="", std::string asunto="", long monto=0);
+	Orden(long fecha=0,std::string tipo="", std::string asunto="", long monto=0);
 	void GuardarEnBinario(std::ofstream &archivo);
 	void LeerDesdeBinario(std::ifstream &archivo);
 	std::string ValidarDatos();
@@ -31,7 +35,7 @@ public:
 	
 };
 	
-	bool comparar_fecha(const Admin &a1, const Admin &a2);
-	bool comparar_tipo(const Admin &a1, const Admin &a2);
+	bool comparar_fecha(const Orden &a1, const Orden &a2);
+	bool comparar_tipo(const Orden &a1, const Orden &a2);
 #endif
 

@@ -9,8 +9,6 @@
 
 class Application : public wxApp {
 private:
-	//std::string archiUser;
-	//Grid *m_grid;
 	Usuario *m_usuario;
 public:
 	virtual bool OnInit();

@@ -30,7 +30,7 @@ std::string m_Filtros::VerTipo(){
 	return tipo;
 }
 
-void m_Filtros::SetWindow(m_Window *mainWindow){
+void m_Filtros::SetWindow(m_Gestor *mainWindow){
 	_mainWindow = mainWindow;
 }
 

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
-#include "Admin.h"
+#include "Orden.h"
 #include <iostream>
 #include <tuple>
 
@@ -37,7 +37,7 @@ bool Grid::Guardar(){
 		}
 	}
 	
-	Admin total(ultFecha,"------","BALANCE: ",MontoTotal());
+	Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
 	grid.push_back(total);
 	int cantCompras = CantidadDatos();
 	if(cantCompras>0){
@@ -49,7 +49,7 @@ bool Grid::Guardar(){
 	return true;
 }
 
-void Grid::AgregarCompra(const Admin &a){
+void Grid::AgregarCompra(const Orden &a){
 	if (!grid.empty()) grid.erase(grid.end()-1);
 	grid.push_back(a);
 }
@@ -74,11 +74,11 @@ long Grid::MontoTotal(){
 	return suma;
 }
 
-Admin &Grid::VerGasto(int i) {
+Orden &Grid::VerGasto(int i) {
 	return grid[i];
 }
 
-void Grid::ExportarTxt(Admin &a){
+void Grid::ExportarTxt(Orden &a){
 	std::ofstream Archivo(nombreTxt,std::ios::trunc);
 	
 	Archivo << nombreTxt << std::endl;
@@ -108,7 +108,7 @@ void Grid::Ordenar(CriterioOrden criterio) {
 		}
 	}
 	
-	Admin total(ultFecha,"------","BALANCE: ",MontoTotal());
+	Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
 	grid.push_back(total);
 }
 
@@ -117,7 +117,7 @@ std::tuple<int,int,int> TotalesGlobales(){
 	int EgresosTotales = 0;
 	
 	for (int i = 0; i < CantidadDatos(); i++) {
-		Admin& a = VerGasto(i);
+		Orden& a = VerGasto(i);
 		if (a.VerTipo() == "Ingreso") {
 			IngresosTotales += a.VerMonto();
 		} else if (a.VerTipo() == "Egreso") {

@@ -4,12 +4,12 @@
 #include "Usuario.h"
 #include "Grid.h"
 #include <string>
-#include "m_Window.h"
+#include "m_Gestor.h"
 
 class m_Home : public Home {
 	
 private:
-	m_Window *windowGrilla;
+	m_Gestor *windowGrilla;
 	Grid *m_grid;
 	
 	
@@ -22,8 +22,6 @@ protected:
 	
 public:
 	m_Home(Usuario *usuario);
-	//std::string verNombre();
-	//m_Home(wxWindow *parent=NULL);
 };
 
 #endif

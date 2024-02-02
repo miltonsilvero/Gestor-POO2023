@@ -1,4 +1,4 @@
-#include "m_Window.h"
+#include "m_Gestor.h"
 #include <wx/msgdlg.h>
 #include <wx/valtext.h>
 #include <fstream>
@@ -6,7 +6,7 @@
 #include <wx/string.h>
 #include "string_conv.h"
 
-m_Window::m_Window(Grid *grid, wxWindow *parent) : Window(parent), m_grid(grid) {
+m_Gestor::m_Gestor(Grid *grid, wxWindow *parent) : Gestor(parent), m_grid(grid) {
 	Refresh();
 	//Validar solo numeros en el monto
 	wxTextValidator tv(wxFILTER_NUMERIC);
@@ -14,7 +14,7 @@ m_Window::m_Window(Grid *grid, wxWindow *parent) : Window(parent), m_grid(grid) 
 	m_filtros = nullptr;
 }
 
-void m_Window::ClickIngreso( wxCommandEvent& event )  {
+void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
 		long d,m,a;
 		long monto;
@@ -32,7 +32,7 @@ void m_Window::ClickIngreso( wxCommandEvent& event )  {
 		}
 		
 		long fecha = a*10000+m*100+d;
-		Admin ingreso(fecha,"Ingreso",asunto,monto);
+		Orden ingreso(fecha,"Ingreso",asunto,monto);
 		aux = ingreso;
 		m_grid->AgregarCompra(ingreso);
 		m_grid->Guardar();
@@ -41,10 +41,9 @@ void m_Window::ClickIngreso( wxCommandEvent& event )  {
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
-	
 }
 
-void m_Window::ClickEgreso( wxCommandEvent& event )  {
+void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
 		//Variables
 		long d,m,a;
@@ -63,7 +62,7 @@ void m_Window::ClickEgreso( wxCommandEvent& event )  {
 		}
 		
 		long fecha = a*10000+m*100+d;
-		Admin egreso(fecha,"Egreso",asunto,monto);
+		Orden egreso(fecha,"Egreso",asunto,monto);
 		aux = egreso;
 		m_grid->AgregarCompra(egreso);
 		m_grid->Guardar();
@@ -72,10 +71,9 @@ void m_Window::ClickEgreso( wxCommandEvent& event )  {
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
-	
 }
 
-void m_Window::ClickGrilla( wxGridEvent& event )  {
+void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 	if(_userName != "admin"){
 		int columna = event.GetCol();
 		switch(columna) { 
@@ -89,7 +87,7 @@ void m_Window::ClickGrilla( wxGridEvent& event )  {
 	}
 }
 
-void m_Window::ClickBorrar(wxCommandEvent& event) {
+void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 	if(_userName != "admin"){
 		int selectedRow = m_Historial->GetGridCursorRow();
 		int numRows = m_Historial->GetNumberRows();
@@ -109,8 +107,19 @@ void m_Window::ClickBorrar(wxCommandEvent& event) {
 	}
 }
 
+void m_Gestor::ClickFiltrar( wxCommandEvent& event )  {
+	if(_userName != "admin"){
+		if (!m_filtros) {
+			m_filtros = new m_Filtros(this);
+			m_filtros->SetWindow(this);
+		}
+		m_filtros->Show();
+	}else{
+		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
+	}
+}
 
-void m_Window::ClickImprimir( wxCommandEvent& event )  {
+void m_Gestor::ClickImprimir( wxCommandEvent& event )  {
 	if(m_Historial->GetNumberRows() != 0){
 		m_grid->ExportarTxt(aux);
 		wxMessageBox("Se imprimio el historial","EXITO");
@@ -118,41 +127,19 @@ void m_Window::ClickImprimir( wxCommandEvent& event )  {
 }
 
 
-void m_Window::Refresh(){
-	if(m_Historial->GetNumberRows() != 0){
-		m_Historial->DeleteRows(0,m_Historial->GetNumberRows());
-	}
-	if(m_grid->CantidadDatos()>0){
-		for(int i=0;i<m_grid->CantidadDatos();i++){
-			Admin &a = m_grid->VerGasto(i);
-			m_Historial->AppendRows();
-			wxString fecha = wxString::Format("%1d",a.VerFecha());
-			m_Historial->SetCellValue(i,0,fecha);
-			m_Historial->SetCellValue(i,1,a.VerTipo());
-			m_Historial->SetCellValue(i,2,a.VerAsunto());
-			wxString monto = wxString::Format("%1d",a.VerMonto());
-			m_Historial->SetCellValue(i,3,monto);
-		}
-	}
-	
-	if (m_grid->EsAdmin(_username)) {
-		auto totales = m_grid->TotalesGlobales();
-		int newRow = m_Historial->AppendRows();
-		m_Historial->SetCellValue(newRow, 0, "Totales:");
-		m_Historial->SetCellValue(newRow, 1, wxString::Format("%d", std::get<0>(totales)));
-		m_Historial->SetCellValue(newRow, 2, wxString::Format("%d", std::get<1>(totales)));
-		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<2>(totales)));
-	}
-}	
 
-void m_Window::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo) {
+void m_Gestor::GetName(std::string userName){
+	_userName = userName;
+}
+
+void m_Gestor::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo) {
 	if (m_Historial->GetNumberRows() != 0) {
 		m_Historial->DeleteRows(0, m_Historial->GetNumberRows());
 	}
 	
 	if (m_grid->CantidadDatos() > 0) {
 		for (int i = 0; i < m_grid->CantidadDatos(); i++) {
-			Admin& a = m_grid->VerGasto(i);
+			Orden& a = m_grid->VerGasto(i);
 			
 			bool cumpleFiltros = true;
 			
@@ -185,21 +172,34 @@ void m_Window::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fech
 	}
 }
 
-void m_Window::GetName(std::string userName){
-	_userName = userName;
-}
-
-void m_Window::ClickFiltrar( wxCommandEvent& event )  {
-	if(_userName != "admin"){
-		if (!m_filtros) {
-			m_filtros = new m_Filtros(this);
-			m_filtros->SetWindow(this);
+void m_Gestor::Refresh(){
+	if(m_Historial->GetNumberRows() != 0){
+		m_Historial->DeleteRows(0,m_Historial->GetNumberRows());
+	}
+	if(m_grid->CantidadDatos()>0){
+		for(int i=0;i<m_grid->CantidadDatos();i++){
+			Orden &a = m_grid->VerGasto(i);
+			m_Historial->AppendRows();
+			wxString fecha = wxString::Format("%1d",a.VerFecha());
+			m_Historial->SetCellValue(i,0,fecha);
+			m_Historial->SetCellValue(i,1,a.VerTipo());
+			m_Historial->SetCellValue(i,2,a.VerAsunto());
+			wxString monto = wxString::Format("%1d",a.VerMonto());
+			m_Historial->SetCellValue(i,3,monto);
 		}
-		m_filtros->Show();
-	}else{
-		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
+	}
+	
+	if (m_grid->EsAdmin(_userName)) {
+		auto totales = m_grid->TotalesGlobales();
+		int newRow = m_Historial->AppendRows();
+		m_Historial->SetCellValue(newRow, 0, "Totales:");
+		m_Historial->SetCellValue(newRow, 1, wxString::Format("%d", std::get<0>(totales)));
+		m_Historial->SetCellValue(newRow, 2, wxString::Format("%d", std::get<1>(totales)));
+		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<2>(totales)));
 	}
 }
 
-m_Window::~m_Window() {
+m_Gestor::~m_Gestor() {
+	
 }
+

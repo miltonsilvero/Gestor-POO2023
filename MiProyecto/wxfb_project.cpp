@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-Window::Window( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+Gestor::Gestor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 750,400 ), wxSize( 750,400 ) );
 	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
@@ -184,23 +184,23 @@ Window::Window( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_ingresoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickIngreso ), NULL, this );
-	m_egresoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickEgreso ), NULL, this );
-	m_Historial->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( Window::ClickGrilla ), NULL, this );
-	m_borrarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickBorrar ), NULL, this );
-	m_filtrarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickFiltrar ), NULL, this );
-	m_imprimirButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickImprimir ), NULL, this );
+	m_ingresoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickIngreso ), NULL, this );
+	m_egresoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickEgreso ), NULL, this );
+	m_Historial->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( Gestor::ClickGrilla ), NULL, this );
+	m_borrarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickBorrar ), NULL, this );
+	m_filtrarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickFiltrar ), NULL, this );
+	m_imprimirButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickImprimir ), NULL, this );
 }
 
-Window::~Window()
+Gestor::~Gestor()
 {
 	// Disconnect Events
-	m_ingresoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickIngreso ), NULL, this );
-	m_egresoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickEgreso ), NULL, this );
-	m_Historial->Disconnect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( Window::ClickGrilla ), NULL, this );
-	m_borrarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickBorrar ), NULL, this );
-	m_filtrarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickFiltrar ), NULL, this );
-	m_imprimirButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Window::ClickImprimir ), NULL, this );
+	m_ingresoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickIngreso ), NULL, this );
+	m_egresoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickEgreso ), NULL, this );
+	m_Historial->Disconnect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( Gestor::ClickGrilla ), NULL, this );
+	m_borrarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickBorrar ), NULL, this );
+	m_filtrarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickFiltrar ), NULL, this );
+	m_imprimirButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Gestor::ClickImprimir ), NULL, this );
 
 }
 

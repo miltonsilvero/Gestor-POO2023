@@ -1,16 +1,16 @@
-#include "Admin.h"
+#include "Orden.h"
 #include <fstream>
 #include <cstring>
 #include <cctype>
 
-Admin::Admin(long fecha, std::string tipo, std::string asunto, long monto) {
+Orden::Orden(long fecha, std::string tipo, std::string asunto, long monto) {
 	this->fecha = fecha;
 	this->tipo = tipo;
 	this->asunto = asunto;
 	this->monto = monto;
 }
 
-void Admin::GuardarEnBinario(std::ofstream &archivo) {
+void Orden::GuardarEnBinario(std::ofstream &archivo) {
 	compras com;
 	com.fecha = fecha;
 	strcpy(com.tipo,tipo.c_str());
@@ -20,7 +20,7 @@ void Admin::GuardarEnBinario(std::ofstream &archivo) {
 	archivo.write((char*)&com,sizeof(com));
 }
 
-void Admin::LeerDesdeBinario(std::ifstream &archivo) {
+void Orden::LeerDesdeBinario(std::ifstream &archivo) {
 	compras com;
 	archivo.read((char*)&com,sizeof(com));
 	fecha = com.fecha;
@@ -29,35 +29,35 @@ void Admin::LeerDesdeBinario(std::ifstream &archivo) {
 	monto = com.monto;
 }
 
-std::string Admin::ValidarDatos() {
+std::string Orden::ValidarDatos() {
 	std::string errores;
 	if (asunto.size()>256) errores+="El asunto es demasiado largo\n";
 	return errores;
 }
 
-long Admin::VerFecha() const{
+long Orden::VerFecha() const{
 	return fecha;
 }
 
-std::string Admin::VerTipo() const{
+std::string Orden::VerTipo() const{
 	return tipo;
 }
 
-std::string Admin::VerAsunto() const{
+std::string Orden::VerAsunto() const{
 	return asunto;
 }
 
-long Admin::VerMonto() const{
+long Orden::VerMonto() const{
 	return monto;
 }
 
-bool comparar_fecha(const Admin &a1, const Admin &a2){
+bool comparar_fecha(const Orden &a1, const Orden &a2){
 	long f1 = a1.VerFecha();
 	long f2 = a2.VerFecha();
 	return f1<f2;
 }
 
-bool comparar_tipo(const Admin &a1, const Admin &a2){
+bool comparar_tipo(const Orden &a1, const Orden &a2){
 	std::string t1 = a1.VerTipo();
 	for (size_t i=0;i<t1.size();i++)
 		t1[i]=std::tolower(t1[i]);
