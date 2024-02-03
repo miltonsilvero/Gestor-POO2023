@@ -1,3 +1,4 @@
+#include "m_Gestor.h"
 #include "m_Filtros.h"
 
 m_Filtros::m_Filtros(wxWindow *parent) : Filtros(parent) {

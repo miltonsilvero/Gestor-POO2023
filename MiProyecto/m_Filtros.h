@@ -1,7 +1,8 @@
 #ifndef M_FILTROS_H
 #define M_FILTROS_H
 #include "wxfb_project.h"
-#include "m_Gestor.h"
+//#include "m_Gestor.h"
+class m_Gestor;                  //declaracion forward
 
 class m_Filtros : public Filtros {
 	

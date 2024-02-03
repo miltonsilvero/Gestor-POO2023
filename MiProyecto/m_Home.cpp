@@ -12,7 +12,6 @@ m_Home::m_Home(Usuario *usuario) : Home(nullptr), m_usuario(usuario) {
 }
 
 void m_Home::ClickInicio( wxCommandEvent& event )  {
-	std::cout << "Inicio presionado." << std::endl;
 	std::string name;
 	std::string password;
 	windowGrilla->GetName(name);
