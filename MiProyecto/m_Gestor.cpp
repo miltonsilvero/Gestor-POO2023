@@ -6,12 +6,43 @@
 #include <wx/string.h>
 #include "string_conv.h"
 
-m_Gestor::m_Gestor(Grid *grid, wxWindow *parent) : Gestor(parent), m_grid(grid) {
-	Refresh();
+m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : Gestor(parent), m_grid(grid), _userName(userName) {
 	//Validar solo numeros en el monto
 	wxTextValidator tv(wxFILTER_NUMERIC);
 	m_montoLabel->SetValidator(tv);
 	m_filtros = nullptr;
+	std::cout << "_userName: " << _userName << std::endl;
+	
+	if(_userName != "admin"){
+		Refresh();
+	} else{
+		if(m_Historial->GetNumberRows() > 0){
+			for(int i=0;i<m_Historial->GetNumberRows();i++){
+				m_grid->EliminarCompra(i);
+			}
+		}
+		
+		auto totales = m_grid->TotalesGlobales();
+		
+		Orden ingresosT(000,"Total","Ingresos:",std::get<0>(totales));
+		aux = ingresosT;
+		m_grid->AgregarCompra(ingresosT);
+		//m_grid->Guardar();
+		//Refresh();
+		
+		Orden egresosT(000,"Total","Egresos:",std::get<1>(totales));
+		aux = egresosT;
+		m_grid->AgregarCompra(egresosT);
+		//m_grid->Guardar();
+		//Refresh();
+		
+		Orden balanceT(000,"Total","Balance:",std::get<2>(totales));
+		aux = balanceT;
+		m_grid->AgregarCompra(balanceT);
+		m_grid->Guardar();
+		Refresh();
+	}
+	
 }
 
 void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
@@ -100,8 +131,8 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 		
 		m_grid->EliminarCompra(selectedRow);
 		m_grid->Guardar();
-		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		//Refresh();
+		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
+		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -124,12 +155,6 @@ void m_Gestor::ClickImprimir( wxCommandEvent& event )  {
 		m_grid->ExportarTxt(aux);
 		wxMessageBox("Se imprimio el historial","EXITO");
 	}
-}
-
-
-
-void m_Gestor::GetName(std::string userName){
-	_userName = userName;
 }
 
 void m_Gestor::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo) {
@@ -176,6 +201,7 @@ void m_Gestor::Refresh(){
 	if(m_Historial->GetNumberRows() != 0){
 		m_Historial->DeleteRows(0,m_Historial->GetNumberRows());
 	}
+	
 	if(m_grid->CantidadDatos()>0){
 		for(int i=0;i<m_grid->CantidadDatos();i++){
 			Orden &a = m_grid->VerGasto(i);
@@ -188,15 +214,32 @@ void m_Gestor::Refresh(){
 			m_Historial->SetCellValue(i,3,monto);
 		}
 	}
-	
-	if (m_grid->EsAdmin(_userName)) {
+	/*if (_userName == "admin") {
 		auto totales = m_grid->TotalesGlobales();
+		
 		int newRow = m_Historial->AppendRows();
-		m_Historial->SetCellValue(newRow, 0, "Totales:");
-		m_Historial->SetCellValue(newRow, 1, wxString::Format("%d", std::get<0>(totales)));
-		m_Historial->SetCellValue(newRow, 2, wxString::Format("%d", std::get<1>(totales)));
+		
+		m_Historial->SetCellValue(newRow, 0, "-----");
+		m_Historial->SetCellValue(newRow, 1, "-----");
+		m_Historial->SetCellValue(newRow, 2, "Ingresos");
+		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<0>(totales)));
+		
+		newRow = m_Historial->AppendRows();
+		
+		m_Historial->SetCellValue(newRow, 0, "-----");
+		m_Historial->SetCellValue(newRow, 1, "-----");
+		m_Historial->SetCellValue(newRow, 2, "Egresos");
+		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<1>(totales)));
+		
+		newRow = m_Historial->AppendRows();
+		
+		m_Historial->SetCellValue(newRow, 0, "-----");
+		m_Historial->SetCellValue(newRow, 1, "-----");
+		m_Historial->SetCellValue(newRow, 2, "Balance");
 		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<2>(totales)));
-	}
+	}else {
+		
+	}*/
 }
 
 m_Gestor::~m_Gestor() {

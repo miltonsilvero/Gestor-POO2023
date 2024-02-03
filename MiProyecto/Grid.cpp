@@ -28,17 +28,21 @@ bool Grid::Guardar(){
 	if(!archivobin.is_open()){
 		return false;
 	}
-	long ultFecha = 0;
-	if(grid.size()>0){
-		for(size_t i=0;i<grid.size();i++){
-			if(grid[i].VerFecha() > ultFecha){
-				ultFecha = grid[i].VerFecha();
+	
+	if(nombreBin != "adminGrid.dat"){
+		long ultFecha = 0;
+		if(grid.size()>0){
+			for(size_t i=0;i<grid.size();i++){
+				if(grid[i].VerFecha() > ultFecha){
+					ultFecha = grid[i].VerFecha();
+				}
 			}
 		}
+		
+		Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
+		grid.push_back(total);
 	}
 	
-	Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
-	grid.push_back(total);
 	int cantCompras = CantidadDatos();
 	if(cantCompras>0){
 		for(int i=0;i<cantCompras;i++){
@@ -126,8 +130,4 @@ std::tuple<int,int,int> Grid::TotalesGlobales(){
 	}
 	
 	return std::make_tuple(IngresosTotales,EgresosTotales,IngresosTotales - EgresosTotales);
-}
-	
-bool Grid::EsAdmin(const std::string& nombreUsuario){
-	return nombreUsuario == "admin";
 }

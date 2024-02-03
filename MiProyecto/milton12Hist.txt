@@ -1,7 +1,23 @@
+milton12Hist.txt
+
 HISTORIAL DE GASTOS
-20241131  Ingreso  Regalo  100000
 20240202  Ingreso  Sueldo  2000
-20240202  Ingreso  Sueldo  2000
-20240202  Ingreso  Sueldo  2000
-20240202  Ingreso  Sueldo  2000
-20241131  ------  BALANCE:   108000
+20230202  Egreso  Gas  2240
+20230101  Egreso  Gas  3256
+20230101  Egreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20230101  Egreso  Gas  3256
+20230101  Egreso  Gas  3256
+20230101  Egreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20230101  Ingreso  Gas  3256
+20240101  Ingreso  Gas  3256
+20240101  Ingreso  Gas  3256
+20240101  Egreso  Gas  3256
+20240101  Egreso  Gas  3256
+20240205  Egreso  Comida  7000
+20240205  Ingreso  Prestamo  7000
+20240205  ------  BALANCE:   3016

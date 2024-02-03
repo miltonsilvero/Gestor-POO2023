@@ -14,21 +14,25 @@ m_Home::m_Home(Usuario *usuario) : Home(nullptr), m_usuario(usuario) {
 void m_Home::ClickInicio( wxCommandEvent& event )  {
 	std::string name;
 	std::string password;
-	windowGrilla->GetName(name);
 	name = m_usuarioLabel->GetValue();
+	//windowGrilla->GetName(name);
 	password = m_contraLabel->GetValue();
 	Persona p(name,password);
 	if(m_usuario->BuscarUsuario(p) == true){
 		if(name == "admin"){
+			std::string aux = name;
+			std::cout << aux;
 			wxMessageBox("¡Bienvenido, Admin!","ÉXITO");
 			m_grid = new Grid("adminGrid.dat","adminHist.txt");
-			windowGrilla = new m_Gestor(m_grid,this);
+			//windowGrilla->GetName(aux);
+			windowGrilla = new m_Gestor(m_grid,name,this);
 			windowGrilla->Show();
 		}else{
 			archiUser = name + "Grid.dat";
 			archiHist = name + "Hist.txt";
 			m_grid = new Grid(archiUser,archiHist);
-			windowGrilla = new m_Gestor(m_grid,this);
+			windowGrilla = new m_Gestor(m_grid,name,this);
+			//windowGrilla->GetName(name);
 			windowGrilla->Show();
 		}
 	} else wxMessageBox("Los valores son incorrectos o no existen.","ERROR");

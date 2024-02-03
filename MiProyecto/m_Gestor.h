@@ -21,11 +21,10 @@ protected:
 	void ClickImprimir( wxCommandEvent& event )  override;
 	
 public:
-	m_Gestor(Grid *grid,wxWindow *parent=NULL);
+	m_Gestor(Grid *grid,const std::string& userName,wxWindow *parent=NULL);
 	
 	void Refresh();
 	void FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo);
-	void GetName(std::string userName);
 	
 	~m_Gestor();
 };

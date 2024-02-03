@@ -22,7 +22,6 @@ public:
 	void ExportarTxt(Orden &a);
 	void Ordenar(CriterioOrden criterio);
 	std::tuple<int,int,int> TotalesGlobales();
-	bool EsAdmin(const std::string& nombreUsuario);
 };
 
 #endif
