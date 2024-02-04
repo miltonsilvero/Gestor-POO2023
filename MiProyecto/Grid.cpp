@@ -54,8 +54,16 @@ bool Grid::Guardar(){
 }
 
 void Grid::AgregarCompra(const Orden &a){
-	if (!grid.empty()) grid.erase(grid.end()-1);
-	grid.push_back(a);
+	if(nombreBin != "adminGrid.dat"){
+		if (!grid.empty()) grid.erase(grid.end()-1);
+		grid.push_back(a);
+	}else{
+		/*if(CantidadDatos() == 3){
+			grid.clear();
+		}*/
+		grid.push_back(a);
+	}
+	//grid.push_back(a);
 }
 
 void Grid::EliminarCompra(int i){
@@ -130,4 +138,8 @@ std::tuple<int,int,int> Grid::TotalesGlobales(){
 	}
 	
 	return std::make_tuple(IngresosTotales,EgresosTotales,IngresosTotales - EgresosTotales);
+}
+
+void Grid::LimpiarGrid(){
+	grid.clear();
 }

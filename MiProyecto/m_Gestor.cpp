@@ -16,24 +16,20 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 	if(_userName != "admin"){
 		Refresh();
 	} else{
-		if(m_Historial->GetNumberRows() > 0){
-			for(int i=0;i<m_Historial->GetNumberRows();i++){
-				m_grid->EliminarCompra(i);
-			}
-		}
+		m_grid->LimpiarGrid();
 		
 		auto totales = m_grid->TotalesGlobales();
 		
 		Orden ingresosT(000,"Total","Ingresos:",std::get<0>(totales));
 		aux = ingresosT;
 		m_grid->AgregarCompra(ingresosT);
-		//m_grid->Guardar();
+		m_grid->Guardar();
 		//Refresh();
 		
 		Orden egresosT(000,"Total","Egresos:",std::get<1>(totales));
 		aux = egresosT;
 		m_grid->AgregarCompra(egresosT);
-		//m_grid->Guardar();
+		m_grid->Guardar();
 		//Refresh();
 		
 		Orden balanceT(000,"Total","Balance:",std::get<2>(totales));
