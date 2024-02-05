@@ -7,7 +7,7 @@
 
 class Usuario {
 private:
-	std::string nombreLista = "Usuarios.dat";
+	std::string nombreLista = "BD_Usuarios.dat";
 	std::vector<Persona> lista_usuarios;
 	struct aux{
 		char name[256];

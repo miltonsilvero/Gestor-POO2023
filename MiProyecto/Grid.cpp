@@ -124,22 +124,6 @@ void Grid::Ordenar(CriterioOrden criterio) {
 	grid.push_back(total);
 }
 
-std::tuple<int,int,int> Grid::TotalesGlobales(){
-	int IngresosTotales = 0;
-	int EgresosTotales = 0;
-	
-	for (int i = 0; i < CantidadDatos(); i++) {
-		Orden& a = VerGasto(i);
-		if (a.VerTipo() == "Ingreso") {
-			IngresosTotales += a.VerMonto();
-		} else if (a.VerTipo() == "Egreso") {
-			EgresosTotales += a.VerMonto();
-		}
-	}
-	
-	return std::make_tuple(IngresosTotales,EgresosTotales,IngresosTotales - EgresosTotales);
-}
-
 void Grid::LimpiarGrid(){
 	grid.clear();
 }

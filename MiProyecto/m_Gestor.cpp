@@ -18,21 +18,20 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 	} else{
 		m_grid->LimpiarGrid();
 		
-		auto totales = m_grid->TotalesGlobales();
-		
-		Orden ingresosT(000,"Total","Ingresos:",std::get<0>(totales));
+		ActualizarTotales(0,0);
+		Orden ingresosT(2024,"Total","Ingresos:",ingT);
 		aux = ingresosT;
 		m_grid->AgregarCompra(ingresosT);
 		m_grid->Guardar();
 		//Refresh();
 		
-		Orden egresosT(000,"Total","Egresos:",std::get<1>(totales));
+		Orden egresosT(2024,"Total","Egresos:",egrT);
 		aux = egresosT;
 		m_grid->AgregarCompra(egresosT);
 		m_grid->Guardar();
 		//Refresh();
 		
-		Orden balanceT(000,"Total","Balance:",std::get<2>(totales));
+		Orden balanceT(2024,"Total","Balance:",ingT-egrT);
 		aux = balanceT;
 		m_grid->AgregarCompra(balanceT);
 		m_grid->Guardar();
@@ -57,6 +56,8 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
 			return;
 		}
+		
+		ActualizarTotales(monto,0);
 		
 		long fecha = a*10000+m*100+d;
 		Orden ingreso(fecha,"Ingreso",asunto,monto);
@@ -87,6 +88,8 @@ void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
 			return;
 		}
+		
+		ActualizarTotales(0,monto);
 		
 		long fecha = a*10000+m*100+d;
 		Orden egreso(fecha,"Egreso",asunto,monto);
@@ -236,6 +239,51 @@ void m_Gestor::Refresh(){
 	}else {
 		
 	}*/
+}
+
+void m_Gestor::LeerTotales(std::ifstream &archivo,std::ifstream &archivo2){
+	long ingresos;
+	archivo.read((char*)&ingresos,sizeof(ingresos));
+	ingT = ingresos;
+	
+	long egresos;
+	archivo2.read((char*)&egresos,sizeof(egresos));
+	egrT = egresos;
+}
+
+void m_Gestor::GuardarTotales(std::ofstream &archivo, std::ofstream &archivo2){
+	long ingresos, egresos;
+	ingresos = ingT;
+	egresos = egrT;
+	
+	archivo.write((char*)&ingresos,sizeof(ingresos));
+	archivo2.write((char*)&egresos,sizeof(egresos));
+}
+
+void m_Gestor::ActualizarTotales(long montoI, long montoE){
+	std::fstream archivoIng(nameIng.c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+	std::fstream archivoEgr(nameEgr.c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+	
+	if (archivoIng.is_open() && archivoEgr.is_open()) {
+		archivoIng.seekg(0, std::ios::beg);
+		archivoEgr.seekg(0, std::ios::beg);
+		
+		archivoIng.read((char*)&ingT, sizeof(ingT));
+		archivoEgr.read((char*)&egrT, sizeof(egrT));
+		
+		ingT += montoI;
+		egrT += montoE;
+		
+		// Escribir los nuevos montos en los archivos
+		archivoIng.seekp(0, std::ios::beg);
+		archivoEgr.seekp(0, std::ios::beg);
+		
+		archivoIng.write((char*)&ingT, sizeof(ingT));
+		archivoEgr.write((char*)&egrT, sizeof(egrT));
+	}
+	
+	archivoIng.close();
+	archivoEgr.close();
 }
 
 m_Gestor::~m_Gestor() {
