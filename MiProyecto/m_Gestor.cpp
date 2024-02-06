@@ -110,8 +110,8 @@ void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 		case 0: m_grid->Ordenar(FECHA); break;
 		case 1: m_grid->Ordenar(TIPO_TRANSACCION); break;
 		}
-		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		//Refresh();
+		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
+		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -274,7 +274,6 @@ void m_Gestor::ActualizarTotales(long montoI, long montoE){
 		ingT += montoI;
 		egrT += montoE;
 		
-		// Escribir los nuevos montos en los archivos
 		archivoIng.seekp(0, std::ios::beg);
 		archivoEgr.seekp(0, std::ios::beg);
 		
