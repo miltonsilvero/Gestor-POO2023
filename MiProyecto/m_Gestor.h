@@ -16,7 +16,6 @@ private:
 	std::string nameEgr = "EgresosT.dat";
 	long ingT,egrT;
 	
-	bool filtrosActivos;
 protected:
 	void ClickIngreso( wxCommandEvent& event )  override;
 	void ClickEgreso( wxCommandEvent& event )  override;

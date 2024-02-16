@@ -7,10 +7,10 @@ class m_Gestor;                  //declaracion forward
 class m_Filtros : public Filtros {
 	
 private:
-	long fechaInicio;
-	long fechaFin;
-	std::string asunto;
-	std::string tipo;
+	long fechaInicio = 0;
+	long fechaFin = 0;
+	std::string asunto = "";
+	std::string tipo = "";
 	
 	bool filtrosActivos = false;
 	

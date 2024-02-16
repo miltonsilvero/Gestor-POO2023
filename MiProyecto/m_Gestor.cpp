@@ -23,19 +23,16 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 		aux = ingresosT;
 		m_grid->AgregarCompra(ingresosT);
 		m_grid->Guardar();
-		//Refresh();
 		
 		Orden egresosT(2024,"Total","Egresos:",egrT);
 		aux = egresosT;
 		m_grid->AgregarCompra(egresosT);
 		m_grid->Guardar();
-		//Refresh();
 		
 		Orden balanceT(2024,"Total","Balance:",ingT-egrT);
 		aux = balanceT;
 		m_grid->AgregarCompra(balanceT);
 		m_grid->Guardar();
-		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 		Refresh();
 	}
 	
@@ -43,30 +40,33 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 
 void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		long d,m,a;
-		long monto;
-		std::string asunto;
-		//Obtener datos
-		m_diaLabel->GetValue().ToLong(&d);
-		m_mesLabel->GetValue().ToLong(&m);
-		m_anioLabel->GetValue().ToLong(&a);
-		m_montoLabel->GetValue().ToLong(&monto);
-		asunto = m_asuntoLabel->GetValue();
-		
-		if (d < 1 || d > 31 or m < 1 || m > 12) {
-			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
-			return;
+		if(m_filtros->EstadoFiltros() == false){
+			long d,m,a;
+			long monto;
+			std::string asunto;
+			//Obtener datos
+			m_diaLabel->GetValue().ToLong(&d);
+			m_mesLabel->GetValue().ToLong(&m);
+			m_anioLabel->GetValue().ToLong(&a);
+			m_montoLabel->GetValue().ToLong(&monto);
+			asunto = m_asuntoLabel->GetValue();
+			
+			if (d < 1 || d > 31 or m < 1 || m > 12) {
+				wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
+				return;
+			}
+			
+			ActualizarTotales(monto,0);
+			
+			long fecha = a*10000+m*100+d;
+			Orden ingreso(fecha,"Ingreso",asunto,monto);
+			aux = ingreso;
+			m_grid->AgregarCompra(ingreso);
+			m_grid->Guardar();
+			Refresh();
+		}else{
+			wxMessageBox("No puede agregar items con los filtros puestos.","ERROR");
 		}
-		
-		ActualizarTotales(monto,0);
-		
-		long fecha = a*10000+m*100+d;
-		Orden ingreso(fecha,"Ingreso",asunto,monto);
-		aux = ingreso;
-		m_grid->AgregarCompra(ingreso);
-		m_grid->Guardar();
-		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -74,31 +74,34 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 
 void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		//Variables
-		long d,m,a;
-		long monto;
-		std::string asunto;
-		//Obtener datos
-		m_diaLabel->GetValue().ToLong(&d);
-		m_mesLabel->GetValue().ToLong(&m);
-		m_anioLabel->GetValue().ToLong(&a);
-		m_montoLabel->GetValue().ToLong(&monto);
-		asunto = m_asuntoLabel->GetValue();
-		
-		if (d < 1 || d > 31 or m < 1 || m > 12) {
-			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
-			return;
+		if(m_filtros->EstadoFiltros() == false){
+			//Variables
+			long d,m,a;
+			long monto;
+			std::string asunto;
+			//Obtener datos
+			m_diaLabel->GetValue().ToLong(&d);
+			m_mesLabel->GetValue().ToLong(&m);
+			m_anioLabel->GetValue().ToLong(&a);
+			m_montoLabel->GetValue().ToLong(&monto);
+			asunto = m_asuntoLabel->GetValue();
+			
+			if (d < 1 || d > 31 or m < 1 || m > 12) {
+				wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
+				return;
+			}
+			
+			ActualizarTotales(0,monto);
+			
+			long fecha = a*10000+m*100+d;
+			Orden egreso(fecha,"Egreso",asunto,monto);
+			aux = egreso;
+			m_grid->AgregarCompra(egreso);
+			m_grid->Guardar();
+			Refresh();
+		}else{
+			wxMessageBox("No puede agregar items con los filtros puestos.","ERROR");
 		}
-		
-		ActualizarTotales(0,monto);
-		
-		long fecha = a*10000+m*100+d;
-		Orden egreso(fecha,"Egreso",asunto,monto);
-		aux = egreso;
-		m_grid->AgregarCompra(egreso);
-		m_grid->Guardar();
-		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -106,13 +109,16 @@ void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 
 void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 	if(_userName != "admin"){
-		int columna = event.GetCol();
-		switch(columna) { 
-		case 0: m_grid->Ordenar(FECHA); break;
-		case 1: m_grid->Ordenar(TIPO_TRANSACCION); break;
+		if(m_filtros->EstadoFiltros() == false){
+			int columna = event.GetCol();
+			switch(columna) { 
+			case 0: m_grid->Ordenar(FECHA); break;
+			case 1: m_grid->Ordenar(TIPO_TRANSACCION); break;
+			}
+			Refresh();
+		}else{
+			wxMessageBox("Filtros activados.","ERROR");
 		}
-		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -168,10 +174,6 @@ void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, co
 	}
 	
 	
-	fechaInicio = 0; fechaFin = 0;
-	asunto = ""; tipo = "";
-	
-	
 	if (m_grid->CantidadDatos() > 0) {
 		for (int i = 0; i < m_grid->CantidadDatos(); i++) {
 			Orden& a = m_grid->VerGasto(i);
@@ -205,8 +207,6 @@ void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, co
 			}
 		}
 	}
-	
-	filtrosActivos = true;
 }
 
 void m_Gestor::Refresh(){
