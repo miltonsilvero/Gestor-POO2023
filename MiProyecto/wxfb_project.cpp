@@ -376,10 +376,13 @@ Filtros::Filtros( wxWindow* parent, wxWindowID id, const wxString& title, const 
 	bSizer18->Add( bSizer20, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer27;
-	bSizer27 = new wxBoxSizer( wxVERTICAL );
+	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_guardarButton = new wxButton( this, wxID_ANY, wxT("Guardar"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_guardarButton = new wxButton( this, wxID_ANY, wxT("Guardar Filtros"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer27->Add( m_guardarButton, 0, wxALL, 5 );
+
+	m_quitarButton = new wxButton( this, wxID_ANY, wxT("Quitar Filtros"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer27->Add( m_quitarButton, 0, wxALL, 5 );
 
 
 	bSizer18->Add( bSizer27, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -395,11 +398,13 @@ Filtros::Filtros( wxWindow* parent, wxWindowID id, const wxString& title, const 
 
 	// Connect Events
 	m_guardarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickGuardar ), NULL, this );
+	m_quitarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickQuitar ), NULL, this );
 }
 
 Filtros::~Filtros()
 {
 	// Disconnect Events
 	m_guardarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickGuardar ), NULL, this );
+	m_quitarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Filtros::ClickQuitar ), NULL, this );
 
 }

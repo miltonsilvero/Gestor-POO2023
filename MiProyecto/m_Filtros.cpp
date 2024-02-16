@@ -6,22 +6,24 @@ m_Filtros::m_Filtros(wxWindow *parent) : Filtros(parent) {
 }
 
 void m_Filtros::ClickGuardar( wxCommandEvent& event )  {
-	fechaInicio = m_finicioLabel->GetValue();
-	fechaFin = m_ffinalLabel->GetValue();
+	m_finicioLabel->GetValue().ToLong(&fechaInicio);
+	m_ffinalLabel->GetValue().ToLong(&fechaFin);
 	asunto = m_asuntoLabel2->GetValue();
 	tipo = m_tipoLabel2->GetValue();
-	
+
 	this->Close();
 	
 	if (_mainWindow) {
 		_mainWindow->FiltrarYRefresh(fechaInicio,fechaFin,asunto,tipo);
 	}
+	
+	filtrosActivos = true;
 }
 
-std::string m_Filtros::VerFechaInicio(){
+long m_Filtros::VerFechaInicio(){
 	return fechaInicio;
 }
-std::string m_Filtros::VerFechaFin(){
+long m_Filtros::VerFechaFin(){
 	return fechaFin;
 }
 std::string m_Filtros::VerAsunto(){
@@ -36,6 +38,15 @@ void m_Filtros::SetWindow(m_Gestor *mainWindow){
 }
 
 m_Filtros::~m_Filtros() {
+	_mainWindow->Refresh();
+	filtrosActivos = false;
+}
+
+bool m_Filtros::EstadoFiltros(){
+	return filtrosActivos;
+}
+
+void m_Filtros::ClickQuitar( wxCommandEvent& event )  {
 	
 }
 

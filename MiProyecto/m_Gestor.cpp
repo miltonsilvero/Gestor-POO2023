@@ -35,6 +35,7 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 		aux = balanceT;
 		m_grid->AgregarCompra(balanceT);
 		m_grid->Guardar();
+		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 		Refresh();
 	}
 	
@@ -130,8 +131,8 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 		
 		m_grid->EliminarCompra(selectedRow);
 		m_grid->Guardar();
-		//FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		Refresh();
+		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
+		//Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -156,10 +157,20 @@ void m_Gestor::ClickImprimir( wxCommandEvent& event )  {
 	}
 }
 
-void m_Gestor::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo) {
+void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, const wxString& asunto, const wxString& tipo) {
+	if (!m_Historial) {
+		wxMessageBox("Error: m_Historial no está inicializado correctamente.", "Error");
+		return;
+	}
+	
 	if (m_Historial->GetNumberRows() != 0) {
 		m_Historial->DeleteRows(0, m_Historial->GetNumberRows());
 	}
+	
+	
+	fechaInicio = 0; fechaFin = 0;
+	asunto = ""; tipo = "";
+	
 	
 	if (m_grid->CantidadDatos() > 0) {
 		for (int i = 0; i < m_grid->CantidadDatos(); i++) {
@@ -167,19 +178,19 @@ void m_Gestor::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fech
 			
 			bool cumpleFiltros = true;
 			
-			if (!fechaInicio.IsEmpty() && a.VerFecha() < wxAtoi(fechaInicio)) {
+			if (fechaInicio != 0 && a.VerFecha() < fechaInicio) {
 				cumpleFiltros = false;
 			}
 			
-			if (!fechaFin.IsEmpty() && a.VerFecha() > wxAtoi(fechaFin)) {
+			if (fechaFin != 0 && a.VerFecha() > fechaFin) {
 				cumpleFiltros = false;
 			}
 			
-			if (!asunto.IsEmpty() && a.VerAsunto() != asunto) {
+			if (asunto != "" && a.VerAsunto() != asunto) {
 				cumpleFiltros = false;
 			}
 			
-			if (!tipo.IsEmpty() && a.VerTipo() != tipo) {
+			if (tipo != "" && a.VerTipo() != tipo) {
 				cumpleFiltros = false;
 			}
 			
@@ -194,6 +205,8 @@ void m_Gestor::FiltrarYRefresh(const wxString& fechaInicio, const wxString& fech
 			}
 		}
 	}
+	
+	filtrosActivos = true;
 }
 
 void m_Gestor::Refresh(){
@@ -213,32 +226,6 @@ void m_Gestor::Refresh(){
 			m_Historial->SetCellValue(i,3,monto);
 		}
 	}
-	/*if (_userName == "admin") {
-		auto totales = m_grid->TotalesGlobales();
-		
-		int newRow = m_Historial->AppendRows();
-		
-		m_Historial->SetCellValue(newRow, 0, "-----");
-		m_Historial->SetCellValue(newRow, 1, "-----");
-		m_Historial->SetCellValue(newRow, 2, "Ingresos");
-		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<0>(totales)));
-		
-		newRow = m_Historial->AppendRows();
-		
-		m_Historial->SetCellValue(newRow, 0, "-----");
-		m_Historial->SetCellValue(newRow, 1, "-----");
-		m_Historial->SetCellValue(newRow, 2, "Egresos");
-		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<1>(totales)));
-		
-		newRow = m_Historial->AppendRows();
-		
-		m_Historial->SetCellValue(newRow, 0, "-----");
-		m_Historial->SetCellValue(newRow, 1, "-----");
-		m_Historial->SetCellValue(newRow, 2, "Balance");
-		m_Historial->SetCellValue(newRow, 3, wxString::Format("%d", std::get<2>(totales)));
-	}else {
-		
-	}*/
 }
 
 void m_Gestor::LeerTotales(std::ifstream &archivo,std::ifstream &archivo2){

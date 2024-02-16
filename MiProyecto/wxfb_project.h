@@ -117,9 +117,11 @@ class Filtros : public wxFrame
 		wxTextCtrl* m_asuntoLabel2;
 		wxTextCtrl* m_tipoLabel2;
 		wxButton* m_guardarButton;
+		wxButton* m_quitarButton;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void ClickGuardar( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ClickQuitar( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

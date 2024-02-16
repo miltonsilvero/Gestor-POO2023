@@ -15,6 +15,8 @@ private:
 	std::string nameIng = "IngresosT.dat";
 	std::string nameEgr = "EgresosT.dat";
 	long ingT,egrT;
+	
+	bool filtrosActivos;
 protected:
 	void ClickIngreso( wxCommandEvent& event )  override;
 	void ClickEgreso( wxCommandEvent& event )  override;
@@ -27,7 +29,7 @@ public:
 	m_Gestor(Grid *grid,const std::string& userName,wxWindow *parent=NULL);
 	
 	void Refresh();
-	void FiltrarYRefresh(const wxString& fechaInicio, const wxString& fechaFin, const wxString& asunto, const wxString& tipo);
+	void FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, const wxString& asunto, const wxString& tipo);
 	void LeerTotales(std::ifstream &archivo,std::ifstream &archivo2);
 	void GuardarTotales(std::ofstream &archivo, std::ofstream &archivo2);
 	void ActualizarTotales(long montoI, long montoE);

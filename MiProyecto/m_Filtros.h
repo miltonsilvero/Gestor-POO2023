@@ -7,24 +7,27 @@ class m_Gestor;                  //declaracion forward
 class m_Filtros : public Filtros {
 	
 private:
-	std::string fechaInicio;
-	std::string fechaFin;
+	long fechaInicio;
+	long fechaFin;
 	std::string asunto;
 	std::string tipo;
 	
+	bool filtrosActivos = false;
+	
 	m_Gestor *_mainWindow;
 protected:
+	void ClickQuitar( wxCommandEvent& event )  override;
 	void ClickGuardar( wxCommandEvent& event )  override;
 	
 public:
 	m_Filtros(wxWindow *parent=NULL);
 	
 	void SetWindow(m_Gestor *mainWindow);
-	std::string VerFechaInicio();
-	std::string VerFechaFin();
+	long VerFechaInicio();
+	long VerFechaFin();
 	std::string VerAsunto();
 	std::string VerTipo();
-	
+	bool EstadoFiltros();
 	~m_Filtros();
 };
 
