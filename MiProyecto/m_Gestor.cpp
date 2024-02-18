@@ -11,7 +11,6 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 	wxTextValidator tv(wxFILTER_NUMERIC);
 	m_montoLabel->SetValidator(tv);
 	m_filtros = nullptr;
-	std::cout << "_userName: " << _userName << std::endl;
 	
 	if(_userName != "admin"){
 		Refresh();
@@ -40,7 +39,7 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 
 void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		if(m_filtros->EstadoFiltros() == false){
+		/*if(m_filtros->EstadoFiltros() == false){
 			long d,m,a;
 			long monto;
 			std::string asunto;
@@ -66,7 +65,30 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 			Refresh();
 		}else{
 			wxMessageBox("No puede agregar items con los filtros puestos.","ERROR");
+		}*/
+		long d,m,a;
+		long monto;
+		std::string asunto;
+		//Obtener datos
+		m_diaLabel->GetValue().ToLong(&d);
+		m_mesLabel->GetValue().ToLong(&m);
+		m_anioLabel->GetValue().ToLong(&a);
+		m_montoLabel->GetValue().ToLong(&monto);
+		asunto = m_asuntoLabel->GetValue();
+		
+		if (d < 1 || d > 31 or m < 1 || m > 12) {
+			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
+			return;
 		}
+		
+		ActualizarTotales(monto,0);
+		
+		long fecha = a*10000+m*100+d;
+		Orden ingreso(fecha,"Ingreso",asunto,monto);
+		aux = ingreso;
+		m_grid->AgregarCompra(ingreso);
+		m_grid->Guardar();
+		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -74,12 +96,11 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 
 void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		if(m_filtros->EstadoFiltros() == false){
-			//Variables
+		/*if(m_filtros->EstadoFiltros() == false){
 			long d,m,a;
 			long monto;
 			std::string asunto;
-			//Obtener datos
+			
 			m_diaLabel->GetValue().ToLong(&d);
 			m_mesLabel->GetValue().ToLong(&m);
 			m_anioLabel->GetValue().ToLong(&a);
@@ -101,7 +122,30 @@ void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 			Refresh();
 		}else{
 			wxMessageBox("No puede agregar items con los filtros puestos.","ERROR");
+		}*/
+		long d,m,a;
+		long monto;
+		std::string asunto;
+		
+		m_diaLabel->GetValue().ToLong(&d);
+		m_mesLabel->GetValue().ToLong(&m);
+		m_anioLabel->GetValue().ToLong(&a);
+		m_montoLabel->GetValue().ToLong(&monto);
+		asunto = m_asuntoLabel->GetValue();
+		
+		if (d < 1 || d > 31 or m < 1 || m > 12) {
+			wxMessageBox("Fecha no válida. Por favor, ingrese un día entre 1 y 31 y un mes entre 1 y 12.", "Error");
+			return;
 		}
+		
+		ActualizarTotales(0,monto);
+		
+		long fecha = a*10000+m*100+d;
+		Orden egreso(fecha,"Egreso",asunto,monto);
+		aux = egreso;
+		m_grid->AgregarCompra(egreso);
+		m_grid->Guardar();
+		Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -163,47 +207,47 @@ void m_Gestor::ClickImprimir( wxCommandEvent& event )  {
 	}
 }
 
-void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, const wxString& asunto, const wxString& tipo) {
+void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, const wxString& asunto, const wxString& tipo) {  ///fechaInicio, fechaFin, asunto y tipo contienen los filtros que puso el usuario
 	if (!m_Historial) {
-		wxMessageBox("Error: m_Historial no está inicializado correctamente.", "Error");
+		wxMessageBox("Error: m_Historial no está inicializado correctamente.", "Error");     ///Validador 1
 		return;
 	}
 	
 	if (m_Historial->GetNumberRows() != 0) {
-		m_Historial->DeleteRows(0, m_Historial->GetNumberRows());
+		m_Historial->DeleteRows(0, m_Historial->GetNumberRows());                            ///Validador 2
 	}
 	
 	
 	if (m_grid->CantidadDatos() > 0) {
-		for (int i = 0; i < m_grid->CantidadDatos(); i++) {
+		for (int i = 0; i < m_grid->CantidadDatos(); i++) {                          ///Con este bucle cada dato se compara con los filtros
 			Orden& a = m_grid->VerGasto(i);
 			
-			bool cumpleFiltros = true;
+			bool cumpleFiltros = true;                                               ///Este booleano tiene se mantiene true si cumple con los filtros
 			
-			if (fechaInicio != 0 && a.VerFecha() < fechaInicio) {
+			if (fechaInicio != 0 && a.VerFecha() < fechaInicio) {                   ///¿Fecha mayor a la inicial?
 				cumpleFiltros = false;
 			}
 			
-			if (fechaFin != 0 && a.VerFecha() > fechaFin) {
+			if (fechaFin != 0 && a.VerFecha() > fechaFin) {                         ///¿Fecha menor a la final?
 				cumpleFiltros = false;
 			}
 			
-			if (asunto != "" && a.VerAsunto() != asunto) {
+			if (asunto != "" && a.VerAsunto() != asunto) {                          ///¿Mismo asunto?
 				cumpleFiltros = false;
 			}
 			
-			if (tipo != "" && a.VerTipo() != tipo) {
+			if (tipo != "" && a.VerTipo() != tipo) {                                ///¿Mismo tipo?
 				cumpleFiltros = false;
 			}
 			
-			if (cumpleFiltros) {
-				int newRow = m_Historial->AppendRows();
-				wxString fechaStr = wxString::Format("%d", a.VerFecha());
-				m_Historial->SetCellValue(newRow, 0, fechaStr);
-				m_Historial->SetCellValue(newRow, 1, a.VerTipo());
-				m_Historial->SetCellValue(newRow, 2, a.VerAsunto());
-				wxString montoStr = wxString::Format("%d", a.VerMonto());
-				m_Historial->SetCellValue(newRow, 3, montoStr);
+			if (cumpleFiltros) {               ///Si cumple con todos los filtros, se mostrará en pantalla
+				int newRow = m_Historial->AppendRows();                         ///Historial es un arreglo que contiene los datos de las órdenes del usuario. (Lo limpia para agregar nuevas columanas)
+				wxString fechaStr = wxString::Format("%d", a.VerFecha());       ////////
+				m_Historial->SetCellValue(newRow, 0, fechaStr);                 ///
+				m_Historial->SetCellValue(newRow, 1, a.VerTipo());              ///Todas estas líneas de código restantes asignan la fecha, el tipo, el asunto y el monto a las columnas
+				m_Historial->SetCellValue(newRow, 2, a.VerAsunto());            ///para que así se muestre la grilla actualizada con las órdenes.
+				wxString montoStr = wxString::Format("%d", a.VerMonto());       ///
+				m_Historial->SetCellValue(newRow, 3, montoStr);                 ////////
 			}
 		}
 	}

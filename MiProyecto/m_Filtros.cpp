@@ -5,8 +5,8 @@ m_Filtros::m_Filtros(wxWindow *parent) : Filtros(parent) {
 	
 }
 
-void m_Filtros::ClickGuardar( wxCommandEvent& event )  {
-	m_finicioLabel->GetValue().ToLong(&fechaInicio);
+void m_Filtros::ClickGuardar( wxCommandEvent& event )  {  ///Esta función asigna lo que ingresa el usario en los labels a las variables.
+	m_finicioLabel->GetValue().ToLong(&fechaInicio);  
 	m_ffinalLabel->GetValue().ToLong(&fechaFin);
 	asunto = m_asuntoLabel2->GetValue();
 	tipo = m_tipoLabel2->GetValue();
@@ -18,10 +18,10 @@ void m_Filtros::ClickGuardar( wxCommandEvent& event )  {
 	}
 	
 	filtrosActivos = true;
-}
+}                                                         ///A partir de acá hay funciones que devuelven las variables privadas ya con valores asignados.
 
 long m_Filtros::VerFechaInicio(){
-	return fechaInicio;
+	return fechaInicio;               
 }
 long m_Filtros::VerFechaFin(){
 	return fechaFin;
