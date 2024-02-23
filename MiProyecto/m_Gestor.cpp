@@ -135,8 +135,8 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 
 void m_Gestor::ClickFiltrar( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		m_filtros = new m_Filtros(this);
-		m_filtros->SetWindow(this);
+		//m_filtros = new m_Filtros(this);
+		//m_filtros->SetWindow(this);
 		
 		m_filtros->Show();
 	}else{

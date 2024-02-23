@@ -16,7 +16,7 @@ void m_Filtros::ClickGuardar( wxCommandEvent& event )  {  ///Esta función asigna
 	std::cout << asunto << std::endl;
 	std::cout << tipo << std::endl;
 	
-	this->Close();
+	this->Hide();
 	
 	if (_mainWindow) {
 		_mainWindow->FiltrarYRefresh(fechaInicio,fechaFin,asunto,tipo);
@@ -50,13 +50,13 @@ bool m_Filtros::EstadoFiltros(){
 }
 
 void m_Filtros::ClickQuitar( wxCommandEvent& event )  {
-	long fechaInicio = 0;
-	long fechaFin = 0;
-	std::string asunto = "";
-	std::string tipo = "";
-	_mainWindow->Refresh();
+	fechaInicio = 0;
+	fechaFin = 0;
+	asunto = "";
+	tipo = "";
+	_mainWindow->FiltrarYRefresh(fechaInicio, fechaFin, asunto, tipo);
 	filtrosActivos = false;
 	
-	this->Close();
+	this->Hide();
 }
 

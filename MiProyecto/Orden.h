@@ -8,10 +8,10 @@ Clase dedicada a almacenar los datos de cada orden ejecutada de compra y venta.
 ***/
 
 struct compras{
-	long fecha;
+	int fecha;
 	char tipo[256];
 	char asunto[256];
-	long monto;
+	int monto;
 };
 
 class Orden {
