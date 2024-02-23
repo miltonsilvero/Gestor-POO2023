@@ -29,7 +29,6 @@ protected:
 public:
 	m_Gestor(Grid *grid,const std::string& userName,wxWindow *parent=NULL);
 	
-	void Refresh();
 	void FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, const wxString& asunto, const wxString& tipo);
 	void LeerTotales(std::ifstream &archivo,std::ifstream &archivo2);
 	void GuardarTotales(std::ofstream &archivo, std::ofstream &archivo2);

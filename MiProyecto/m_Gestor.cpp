@@ -7,17 +7,17 @@
 #include "string_conv.h"
 
 m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : Gestor(parent), m_grid(grid), _userName(userName) {
-	//Validar solo numeros en el monto
 	wxTextValidator tv(wxFILTER_NUMERIC);
 	m_montoLabel->SetValidator(tv);
-	//m_filtros = nullptr;
+	m_diaLabel->SetValidator(tv);
+	m_mesLabel->SetValidator(tv);
+	m_anioLabel->SetValidator(tv);
+	
 	m_filtros = new m_Filtros(this);
 	m_filtros->SetWindow(this);
 	
 	
 	if(_userName != "admin"){
-		//Refresh();
-		std::cout << "fecha: " << m_filtros->VerFechaInicio() << std::endl;
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	} else{
 		m_grid->LimpiarGrid();
@@ -33,11 +33,11 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 		m_grid->AgregarCompra(egresosT);
 		m_grid->Guardar();
 		
-		Orden balanceT(2024,"Total","Balance:",ingT-egrT);
+		Orden balanceT(2024,"Total","BALANCE: ",ingT-egrT);
 		aux = balanceT;
 		m_grid->AgregarCompra(balanceT);
 		m_grid->Guardar();
-		Refresh();
+		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}
 	
 }
@@ -47,7 +47,7 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 		long d,m,a;
 		long monto;
 		std::string asunto;
-		//Obtener datos
+		
 		m_diaLabel->GetValue().ToLong(&d);
 		m_mesLabel->GetValue().ToLong(&m);
 		m_anioLabel->GetValue().ToLong(&a);
@@ -66,7 +66,6 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 		aux = ingreso;
 		m_grid->AgregarCompra(ingreso);
 		m_grid->Guardar();
-		//Refresh();
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
@@ -97,7 +96,6 @@ void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 		aux = egreso;
 		m_grid->AgregarCompra(egreso);
 		m_grid->Guardar();
-		//Refresh();
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
@@ -111,7 +109,6 @@ void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 		case 0: m_grid->Ordenar(FECHA); break;
 		case 1: m_grid->Ordenar(TIPO_TRANSACCION); break;
 		}
-		//Refresh();
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
@@ -131,7 +128,6 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 		m_grid->EliminarCompra(posOriginal[selectedRow]);
 		m_grid->Guardar();
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-		//Refresh();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
 	}
@@ -203,25 +199,6 @@ void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, co
 				c++;
 			}
 			
-		}
-	}
-}
-
-void m_Gestor::Refresh(){
-	if(m_Historial->GetNumberRows() != 0){
-		m_Historial->DeleteRows(0,m_Historial->GetNumberRows());
-	}
-	
-	if(m_grid->CantidadDatos()>0){
-		for(int i=0;i<m_grid->CantidadDatos();i++){
-			Orden &a = m_grid->VerGasto(i);
-			m_Historial->AppendRows();
-			wxString fecha = wxString::Format("%ld",a.VerFecha());
-			m_Historial->SetCellValue(i,0,fecha);
-			m_Historial->SetCellValue(i,1,a.VerTipo());
-			m_Historial->SetCellValue(i,2,a.VerAsunto());
-			wxString monto = wxString::Format("%1d",a.VerMonto());
-			m_Historial->SetCellValue(i,3,monto);
 		}
 	}
 }
