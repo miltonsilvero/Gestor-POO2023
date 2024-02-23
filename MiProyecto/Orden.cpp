@@ -68,3 +68,21 @@ bool comparar_tipo(const Orden &a1, const Orden &a2){
 	
 	return t1<t2;
 }
+
+bool comparar_asunto(const Orden &a1, const Orden &a2){
+	std::string t1 = a1.VerAsunto();
+	for (size_t i=0;i<t1.size();i++)
+		t1[i]=std::tolower(t1[i]);
+	
+	std::string t2 = a2.VerAsunto();
+	for (size_t i=0;i<t2.size();i++)
+		t2[i]=std::tolower(t2[i]);
+	
+	return t1<t2;
+}
+
+bool comparar_monto(const Orden &a1, const Orden &a2){
+	long f1 = a1.VerMonto();
+	long f2 = a2.VerMonto();
+	return f1<f2;
+}

@@ -37,5 +37,7 @@ public:
 	
 	bool comparar_fecha(const Orden &a1, const Orden &a2);
 	bool comparar_tipo(const Orden &a1, const Orden &a2);
+	bool comparar_asunto(const Orden &a1, const Orden &a2);
+	bool comparar_monto(const Orden &a1, const Orden &a2);
 #endif
 

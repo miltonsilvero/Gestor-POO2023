@@ -112,6 +112,12 @@ void Grid::Ordenar(CriterioOrden criterio) {
 	case TIPO_TRANSACCION: 
 		sort(grid.begin(),grid.end(),comparar_tipo); 
 		break;
+	case ASUNTO:
+		sort(grid.begin(),grid.end(),comparar_asunto);
+		break;
+	case MONTO:
+		sort(grid.begin(),grid.end(),comparar_monto);
+		break;
 	};
 	long ultFecha = 0;
 	for(size_t i=0;i<grid.size();i++){

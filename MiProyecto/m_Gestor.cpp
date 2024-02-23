@@ -108,6 +108,8 @@ void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 		switch(columna) { 
 		case 0: m_grid->Ordenar(FECHA); break;
 		case 1: m_grid->Ordenar(TIPO_TRANSACCION); break;
+		case 2: m_grid->Ordenar(ASUNTO); break;
+		case 3: m_grid->Ordenar(MONTO); break;
 		}
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
@@ -135,9 +137,6 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 
 void m_Gestor::ClickFiltrar( wxCommandEvent& event )  {
 	if(_userName != "admin"){
-		//m_filtros = new m_Filtros(this);
-		//m_filtros->SetWindow(this);
-		
 		m_filtros->Show();
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");

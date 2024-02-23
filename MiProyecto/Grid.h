@@ -4,7 +4,7 @@
 #include <vector>
 #include "Orden.h"
 
-enum CriterioOrden { FECHA, TIPO_TRANSACCION };
+enum CriterioOrden { FECHA, TIPO_TRANSACCION, ASUNTO, MONTO};
 
 class Grid {
 private:
