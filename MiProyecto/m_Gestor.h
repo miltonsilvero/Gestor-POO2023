@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "Orden.h"
 #include "m_Filtros.h"
+#include <vector>
 
 class m_Gestor : public Gestor {
 	
@@ -15,6 +16,7 @@ private:
 	std::string nameIng = "IngresosT.dat";
 	std::string nameEgr = "EgresosT.dat";
 	long ingT,egrT;
+	std::vector<int> posOriginal;
 	
 protected:
 	void ClickIngreso( wxCommandEvent& event )  override;

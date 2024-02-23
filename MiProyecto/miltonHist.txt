@@ -1,0 +1,7 @@
+miltonHist.txt
+
+HISTORIAL DE GASTOS
+20230612  Egreso  Comida  5000
+20230809  Egreso  Luz  2000
+20230809  Ingreso  Sueldo  20000
+20230809  ------  BALANCE:   13000

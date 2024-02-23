@@ -1,0 +1,6 @@
+adminHist.txt
+
+HISTORIAL DE GASTOS
+2024  Total  Ingresos:  394400
+2024  Total  Egresos:  191840
+2024  Total  Balance:  202560
