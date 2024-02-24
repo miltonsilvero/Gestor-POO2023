@@ -19,7 +19,6 @@ void m_Home::ClickInicio( wxCommandEvent& event )  {
 	std::string name;
 	std::string password;
 	name = m_usuarioLabel->GetValue();
-	//windowGrilla->GetName(name);
 	password = m_contraLabel->GetValue();
 	Persona p(name,password);
 	if(m_usuario->BuscarUsuario(p) == true){
