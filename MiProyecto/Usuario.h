@@ -24,6 +24,8 @@ public:
 	void Guardar();
 	int CantidadDatos();
 	std::string NombreArchivo();
+	std::vector<Persona> usuarios();
+	void BorrarUsuario(int i);
 	
 };
 

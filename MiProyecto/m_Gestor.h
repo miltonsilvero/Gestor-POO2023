@@ -5,6 +5,7 @@
 #include "Orden.h"
 #include "m_Filtros.h"
 #include <vector>
+#include "Usuario.h"
 
 class m_Gestor : public Gestor {
 	
@@ -16,7 +17,11 @@ private:
 	std::string nameIng = "IngresosT.dat";
 	std::string nameEgr = "EgresosT.dat";
 	long ingT,egrT;
-	std::vector<int> posOriginal;
+	std::vector<int> posOriginalRow;
+	std::vector<int> posOriginalUser;
+	Usuario *m_usuarios;
+	std::vector<Persona> usuarios;
+	int saldoTotal = 0;
 	
 protected:
 	void ClickIngreso( wxCommandEvent& event )  override;

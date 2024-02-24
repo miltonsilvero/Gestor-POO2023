@@ -5,6 +5,7 @@
 #include <string>
 #include <wx/string.h>
 #include "string_conv.h"
+#include "Persona.h"
 
 m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : Gestor(parent), m_grid(grid), _userName(userName) {
 	wxTextValidator tv(wxFILTER_NUMERIC);
@@ -12,6 +13,8 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 	m_diaLabel->SetValidator(tv);
 	m_mesLabel->SetValidator(tv);
 	m_anioLabel->SetValidator(tv);
+	
+	m_usuarios = new Usuario;
 	
 	m_filtros = new m_Filtros(this);
 	m_filtros->SetWindow(this);
@@ -22,21 +25,23 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 	} else{
 		m_grid->LimpiarGrid();
 		
-		ActualizarTotales(0,0);
-		Orden ingresosT(2024,"Total","Ingresos:",ingT);
-		aux = ingresosT;
-		m_grid->AgregarCompra(ingresosT);
-		m_grid->Guardar();
+		usuarios = m_usuarios->usuarios();
+		posOriginalUser.clear();
+		for (size_t i=0;i<usuarios.size();i++) {
+			if(usuarios[i].VerName() != "admin"){
+				posOriginalUser.push_back(i);
+				std::string nomUser = usuarios[i].VerName() + "Grid.dat";
+				std::string hisUser = usuarios[i].VerName() + "Hist.txt";
+				Grid *grid_lista = new Grid(nomUser,hisUser);
+				m_grid->AgregarCompra(Orden(2024, "User", usuarios[i].VerName(), grid_lista->MontoTotal()));
+				saldoTotal += grid_lista->MontoTotal();
+			}
+		}
 		
-		Orden egresosT(2024,"Total","Egresos:",egrT);
-		aux = egresosT;
-		m_grid->AgregarCompra(egresosT);
-		m_grid->Guardar();
+		m_grid->AgregarCompra(Orden(2024, "---", "BALANCE: ", saldoTotal));
+		m_grid->Guardar(false);
 		
-		Orden balanceT(2024,"Total","BALANCE: ",ingT-egrT);
-		aux = balanceT;
-		m_grid->AgregarCompra(balanceT);
-		m_grid->Guardar();
+		saldoTotal = 0;
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}
 	
@@ -65,7 +70,7 @@ void m_Gestor::ClickIngreso( wxCommandEvent& event )  {
 		Orden ingreso(fecha,"Ingreso",asunto,monto);
 		aux = ingreso;
 		m_grid->AgregarCompra(ingreso);
-		m_grid->Guardar();
+		m_grid->Guardar(false);
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
@@ -95,7 +100,7 @@ void m_Gestor::ClickEgreso( wxCommandEvent& event )  {
 		Orden egreso(fecha,"Egreso",asunto,monto);
 		aux = egreso;
 		m_grid->AgregarCompra(egreso);
-		m_grid->Guardar();
+		m_grid->Guardar(false);
 		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
 	}else{
 		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
@@ -118,21 +123,39 @@ void m_Gestor::ClickGrilla( wxGridEvent& event )  {
 }
 
 void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
-	if(_userName != "admin"){
-		int selectedRow = m_Historial->GetGridCursorRow();
-		int numRows = m_Historial->GetNumberRows();
-		
-		if (selectedRow == numRows - 1) {
-			wxMessageBox("No se puede borrar la última fila directamente. Utilice el botón para borrar.", "ERROR");
-			return;
-		}
-		
-		m_grid->EliminarCompra(posOriginal[selectedRow]);
-		m_grid->Guardar();
-		FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
-	}else{
-		wxMessageBox("El admin solo puede ver e imprimir la grilla.","ERROR");
+	int selectedRow = m_Historial->GetGridCursorRow();
+	int numRows = m_Historial->GetNumberRows();
+	
+	if(_userName == "admin"){
+		m_usuarios->BorrarUsuario(posOriginalUser[selectedRow]);
+		m_usuarios->Guardar();
 	}
+	usuarios = m_usuarios->usuarios();
+	
+	if (selectedRow == numRows - 1) {
+		wxMessageBox("No se puede borrar la última fila directamente. Utilice el botón para borrar.", "ERROR");
+		return;
+	}
+	
+	m_grid->EliminarCompra(posOriginalRow[selectedRow]);
+	
+	posOriginalUser.clear();
+	for (size_t i=0;i<usuarios.size();i++) {
+		if(usuarios[i].VerName() != "admin"){
+			posOriginalUser.push_back(i);
+			std::string nomUser = usuarios[i].VerName() + "Grid.dat";
+			std::string hisUser = usuarios[i].VerName() + "Hist.txt";
+			Grid *grid_lista = new Grid(nomUser,hisUser);
+			saldoTotal += grid_lista->MontoTotal();
+			std::cout << "Monto: " << grid_lista->MontoTotal() << std::endl;
+		}
+	}
+	
+	m_grid->AgregarCompra(Orden(2024, "---", "BALANCE: ", saldoTotal));
+	m_grid->Guardar(false);
+	
+	FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());
+	saldoTotal = 0;
 }
 
 void m_Gestor::ClickFiltrar( wxCommandEvent& event )  {
@@ -163,10 +186,13 @@ void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, co
 	
 	if (m_grid->CantidadDatos() > 0) {
 		int c = 0;
-		posOriginal.clear();
+		posOriginalRow.clear();
 		for (int i = 0; i < m_grid->CantidadDatos(); i++) {                          ///Con este bucle cada dato se compara con los filtros
 			Orden &a = m_grid->VerGasto(i);
 			bool cumpleFiltros = true;                                               ///Este booleano tiene se mantiene true si cumple con los filtros
+			
+			
+			
 			
 			if(a.VerAsunto() != "BALANCE: "){
 				if (fechaInicio != 0 && a.VerFecha() < fechaInicio) {                   ///¿Fecha mayor a la inicial?
@@ -187,7 +213,7 @@ void m_Gestor::FiltrarYRefresh(const long& fechaInicio, const long& fechaFin, co
 			}
 			
 			if (cumpleFiltros) {   								 ///Si cumple con todos los filtros, se mostrará en pantalla
-				posOriginal.push_back(i);
+				posOriginalRow.push_back(i);
 				m_Historial->AppendRows();            		               ///Historial es un arreglo que contiene los datos de las órdenes del usuario. (Lo limpia para agregar nuevas columanas)
 				wxString fechaStr = wxString::Format("%ld", a.VerFecha()); ////////
 				m_Historial->SetCellValue(c, 0, fechaStr);                 ///

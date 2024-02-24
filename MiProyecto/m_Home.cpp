@@ -9,6 +9,10 @@
 
 m_Home::m_Home(Usuario *usuario) : Home(nullptr), m_usuario(usuario) {
 	windowGrilla = nullptr;
+	Persona p("admin","admin");
+	if(m_usuario->Registrado(p) == false){
+		m_usuario->AgregarUsuario(p);
+	}
 }
 
 void m_Home::ClickInicio( wxCommandEvent& event )  {
@@ -24,7 +28,6 @@ void m_Home::ClickInicio( wxCommandEvent& event )  {
 			std::cout << aux;
 			wxMessageBox("¡Bienvenido, Admin!","ÉXITO");
 			m_grid = new Grid("adminGrid.dat","adminHist.txt");
-			//windowGrilla->GetName(aux);
 			windowGrilla = new m_Gestor(m_grid,name,this);
 			windowGrilla->Show();
 		}else{
@@ -32,14 +35,12 @@ void m_Home::ClickInicio( wxCommandEvent& event )  {
 			archiHist = name + "Hist.txt";
 			m_grid = new Grid(archiUser,archiHist);
 			windowGrilla = new m_Gestor(m_grid,name,this);
-			//windowGrilla->GetName(name);
 			windowGrilla->Show();
 		}
 	} else wxMessageBox("Los valores son incorrectos o no existen.","ERROR");
 }
 
 void m_Home::ClickRegistro( wxCommandEvent& event )  {
-	std::cout << "Registro presionado." << std::endl;
 	std::string name;
 	std::string password;
 	name = m_usuarioLabel->GetValue();

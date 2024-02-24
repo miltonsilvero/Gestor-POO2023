@@ -23,7 +23,7 @@ Grid::Grid(std::string nombreBin, std::string nombreTxt) {
 	}
 }
 
-bool Grid::Guardar(){
+bool Grid::Guardar(bool borrar){
 	std::ofstream archivobin(nombreBin.c_str(),std::ios::binary|std::ios::trunc);
 	if(!archivobin.is_open()){
 		return false;
@@ -38,9 +38,10 @@ bool Grid::Guardar(){
 				}
 			}
 		}
-		
-		Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
-		grid.push_back(total);
+		if(!borrar){
+			Orden total(ultFecha,"------","BALANCE: ",MontoTotal());
+			grid.push_back(total);
+		}
 	}
 	
 	int cantCompras = CantidadDatos();
@@ -58,12 +59,8 @@ void Grid::AgregarCompra(const Orden &a){
 		if (!grid.empty()) grid.erase(grid.end()-1);
 		grid.push_back(a);
 	}else{
-		/*if(CantidadDatos() == 3){
-			grid.clear();
-		}*/
 		grid.push_back(a);
 	}
-	//grid.push_back(a);
 }
 
 void Grid::EliminarCompra(int i){

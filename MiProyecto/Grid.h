@@ -13,7 +13,7 @@ private:
 	std::vector<Orden> grid;
 public:
 	Grid(std::string archivobin, std::string archivotxt);
-	bool Guardar();
+	bool Guardar(bool borrar);
 	void AgregarCompra(const Orden &a);
 	void EliminarCompra(int i);
 	int CantidadDatos();

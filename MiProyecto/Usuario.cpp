@@ -2,6 +2,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include "Grid.h"
 
 
 Usuario::Usuario() {
@@ -47,7 +48,6 @@ bool Usuario::Registrado(const Persona &p) {
 	if(lista_usuarios.size() > 0){
 		for (size_t i=0;i<lista_usuarios.size();i++) {
 			if (lista_usuarios[i].VerName() == p.VerName()) {
-				std::cout << "TRUE" << std::endl;
 				nombreArchi = p.VerName() + "Grid.dat";
 				return true;
 			}
@@ -64,7 +64,6 @@ void Usuario::Guardar(){
 			lista_usuarios[i].GuardarEnBinario(archivobin);
 		}
 		archivobin.close();
-		std::cout << "Se guardo el dato." << std::endl;
 	}
 }
 
@@ -76,3 +75,15 @@ std::string Usuario::NombreArchivo(){
 	return nombreArchi;
 }
 
+std::vector<Persona> Usuario::usuarios(){
+	return lista_usuarios;
+}
+
+void Usuario::BorrarUsuario(int i){
+	lista_usuarios.erase(lista_usuarios.begin()+i);
+	std::string nomBin = lista_usuarios[i].VerName() + "Grid.dat";
+	std::string nomTxt = lista_usuarios[i].VerName() + "Hist.txt";
+	Grid *grid = new Grid(nomBin,nomTxt);
+	grid->LimpiarGrid();
+	grid->Guardar(true);
+}
