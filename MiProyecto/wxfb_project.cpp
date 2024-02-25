@@ -366,8 +366,11 @@ Filtros::Filtros( wxWindow* parent, wxWindowID id, const wxString& title, const 
 	m_asuntoLabel2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer22->Add( m_asuntoLabel2, 0, wxALL, 5 );
 
-	m_tipoLabel2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer22->Add( m_tipoLabel2, 0, wxALL, 5 );
+	wxString m_tipoChoiseChoices[] = { wxEmptyString, wxT("Ingreso"), wxT("Egreso") };
+	int m_tipoChoiseNChoices = sizeof( m_tipoChoiseChoices ) / sizeof( wxString );
+	m_tipoChoise = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_tipoChoiseNChoices, m_tipoChoiseChoices, 0 );
+	m_tipoChoise->SetSelection( 0 );
+	bSizer22->Add( m_tipoChoise, 0, wxALL, 5 );
 
 
 	bSizer20->Add( bSizer22, 1, wxALIGN_CENTER_HORIZONTAL, 5 );

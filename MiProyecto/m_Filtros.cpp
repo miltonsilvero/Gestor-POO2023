@@ -9,12 +9,14 @@ void m_Filtros::ClickGuardar( wxCommandEvent& event )  {  ///Esta función asigna
 	m_finicioLabel->GetValue().ToLong(&fechaInicio);  
 	m_ffinalLabel->GetValue().ToLong(&fechaFin);
 	asunto = m_asuntoLabel2->GetValue();
-	tipo = m_tipoLabel2->GetValue();
-	
-	std::cout << fechaInicio << std::endl;
-	std::cout << fechaFin << std::endl;
-	std::cout << asunto << std::endl;
-	std::cout << tipo << std::endl;
+	switch(m_tipoChoise->GetSelection()){
+	case 0: tipo = "";
+		break;
+	case 1: tipo = "Ingreso";
+		break;
+	case 2: tipo = "Egreso";
+		break;
+	}
 	
 	this->Hide();
 	

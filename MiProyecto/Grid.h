@@ -17,7 +17,7 @@ public:
 	void AgregarCompra(const Orden &a);
 	void EliminarCompra(int i);
 	int CantidadDatos();
-	long int MontoTotal();
+	int MontoTotal();
 	Orden &VerGasto(int i);
 	void ExportarTxt(Orden &a);
 	void Ordenar(CriterioOrden criterio);

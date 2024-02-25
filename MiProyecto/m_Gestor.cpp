@@ -35,7 +35,9 @@ m_Gestor::m_Gestor(Grid *grid,const std::string& userName, wxWindow *parent) : G
 				Grid *grid_lista = new Grid(nomUser,hisUser);
 				m_grid->AgregarCompra(Orden(2024, "User", usuarios[i].VerName(), grid_lista->MontoTotal()));
 				saldoTotal += grid_lista->MontoTotal();
+				std::cout << "Monto total: " << grid_lista->MontoTotal() << std::endl;
 			}
+			
 		}
 		
 		m_grid->AgregarCompra(Orden(2024, "---", "BALANCE: ", saldoTotal));
@@ -126,32 +128,29 @@ void m_Gestor::ClickBorrar( wxCommandEvent& event )  {
 	int selectedRow = m_Historial->GetGridCursorRow();
 	int numRows = m_Historial->GetNumberRows();
 	
-	if(_userName == "admin"){
-		m_usuarios->BorrarUsuario(posOriginalUser[selectedRow]);
-		m_usuarios->Guardar();
-	}
-	usuarios = m_usuarios->usuarios();
-	
 	if (selectedRow == numRows - 1) {
 		wxMessageBox("No se puede borrar la última fila directamente. Utilice el botón para borrar.", "ERROR");
 		return;
-	}
+	} else m_grid->EliminarCompra(posOriginalRow[selectedRow]);
 	
-	m_grid->EliminarCompra(posOriginalRow[selectedRow]);
-	
-	posOriginalUser.clear();
-	for (size_t i=0;i<usuarios.size();i++) {
-		if(usuarios[i].VerName() != "admin"){
-			posOriginalUser.push_back(i);
-			std::string nomUser = usuarios[i].VerName() + "Grid.dat";
-			std::string hisUser = usuarios[i].VerName() + "Hist.txt";
-			Grid *grid_lista = new Grid(nomUser,hisUser);
-			saldoTotal += grid_lista->MontoTotal();
-			std::cout << "Monto: " << grid_lista->MontoTotal() << std::endl;
+	usuarios = m_usuarios->usuarios();
+	if(_userName == "admin"){
+		m_usuarios->BorrarUsuario(posOriginalUser[selectedRow]);
+		m_usuarios->Guardar();
+		posOriginalUser.clear();
+		for (size_t i=0;i<usuarios.size();i++) {
+			if(usuarios[i].VerName() != "admin"){
+				posOriginalUser.push_back(i);
+				std::string nomUser = usuarios[i].VerName() + "Grid.dat";
+				std::string hisUser = usuarios[i].VerName() + "Hist.txt";
+				Grid *grid_lista = new Grid(nomUser,hisUser);
+				saldoTotal += grid_lista->MontoTotal();
+				std::cout << "Monto: " << grid_lista->MontoTotal() << std::endl;
+			}
 		}
+		
+		m_grid->AgregarCompra(Orden(2024, "---", "BALANCE: ", saldoTotal));
 	}
-	
-	m_grid->AgregarCompra(Orden(2024, "---", "BALANCE: ", saldoTotal));
 	m_grid->Guardar(false);
 	
 	FiltrarYRefresh(m_filtros->VerFechaInicio(),m_filtros->VerFechaFin(),m_filtros->VerAsunto(),m_filtros->VerTipo());

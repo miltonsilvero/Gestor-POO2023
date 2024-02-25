@@ -72,13 +72,16 @@ int Grid::CantidadDatos() {
 	return grid.size();
 }
 
-long Grid::MontoTotal(){
-	long suma = 0;
+int Grid::MontoTotal(){
+	int suma = 0;
 	for(size_t i=0;i<grid.size();i++){
-		if(grid[i].VerTipo() == "Egreso"){
-			suma-=grid[i].VerMonto();
+		if(grid[i].VerAsunto() != "BALANCE: "){
+			if(grid[i].VerTipo() == "Egreso"){
+				suma-=grid[i].VerMonto();
+			}
+			else suma+=grid[i].VerMonto();
 		}
-		else suma+=grid[i].VerMonto();
+		
 	}
 	return suma;
 }

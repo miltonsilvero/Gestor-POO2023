@@ -23,6 +23,7 @@
 #include <wx/icon.h>
 #include <wx/grid.h>
 #include <wx/frame.h>
+#include <wx/choice.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -115,7 +116,7 @@ class Filtros : public wxFrame
 		wxStaticText* m_asuntoText2;
 		wxStaticText* m_tipoText2;
 		wxTextCtrl* m_asuntoLabel2;
-		wxTextCtrl* m_tipoLabel2;
+		wxChoice* m_tipoChoise;
 		wxButton* m_guardarButton;
 		wxButton* m_quitarButton;
 
